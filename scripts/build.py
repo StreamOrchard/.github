@@ -289,8 +289,14 @@ def multiview():
     focus_a = {'s1': (0, 0, 364, 268), 's2': (372, 0, 164, 90), 's3': (372, 98, 164, 90), 'c': (372, 196, 164, 72)}
     tile = {'s1': (0, 0, 264, 130), 's2': (272, 0, 264, 130), 's3': (0, 138, 264, 130), 'c': (272, 138, 264, 130)}
     focus_b = {**focus_a, 's1': focus_a['s2'], 's2': focus_a['s1']}
-    columns = {'s1': (0, 0, 172, 168), 's2': (182, 0, 172, 168), 's3': (364, 0, 172, 168), 'c': (0, 176, 536, 92)}
+    # Columns: each stream with its own chat under it
+    columns = {'s1': (0, 0, 172, 118), 's2': (182, 0, 172, 118), 's3': (364, 0, 172, 118),
+               'c': (0, 126, 172, 142), 'c2': (182, 126, 172, 142), 'c3': (364, 126, 172, 142)}
     states = [focus_a, tile, focus_b, columns]
+    for state in states:  # elsewhere LunaPlays' and orchard fm's chats are folded flat under their streams
+        for chat, stream in (('c2', 's2'), ('c3', 's3')):
+            x, y, w, h = state[stream]
+            state.setdefault(chat, (x, y + h, w, 0))
     names = ['Focus view', 'Tile', 'Focus view', 'Columns']
     main = ['s1', 's1', 's2', 's2']
     n, T = len(states), len(states) * (hold + move)
@@ -331,14 +337,17 @@ def multiview():
 
     chat_colors = [KICK, '#ff8a3d', '#ff5fa2', '#ffd23d', '#3da9ff', TWITCH, KICK, '#ff8a3d', '#3da9ff', '#ff5fa2']
     rnd = random.Random(3)
-    chat_lines = ''.join(f'<rect x="10" y="{num(34 + i * 13)}" width="{rnd.randint(18, 34)}" height="5" rx="2.5" fill="{c}"/>'
-                         f'<rect x="{50}" y="{num(34 + i * 13)}" width="{rnd.randint(40, 200)}" height="5" rx="2.5" fill="#fff" fill-opacity=".14"/>'
-                         for i, c in enumerate(chat_colors * 2))
-    tiles.append(f'''<svg x="0" y="0" width="1" height="1">{geom('c')}
-<clipPath id="clip-c"><rect width="100%" height="100%" rx="9"/></clipPath>
-<g clip-path="url(#clip-c)"><rect width="100%" height="100%" fill="#0b100d"/>
-<g class="chat">{chat_lines}</g>
-<rect width="100%" height="24" fill="#0b100d"/><circle cx="13" cy="12" r="4" fill="{KICK}"/>{text('Chat', 23, 16, 11, 600, TEXT)}</g>
+    chats = []  # drawn under the streams, so a chat slides out from behind its stream
+    for key, dot in (('c', KICK), ('c2', TWITCH), ('c3', YOUTUBE)):
+        colors = chat_colors[len(key):] + chat_colors[:len(key)]  # each chat its own
+        chat_lines = ''.join(f'<rect x="10" y="{num(34 + i * 13)}" width="{rnd.randint(18, 34)}" height="5" rx="2.5" fill="{c}"/>'
+                             f'<rect x="{50}" y="{num(34 + i * 13)}" width="{rnd.randint(40, 200)}" height="5" rx="2.5" fill="#fff" fill-opacity=".14"/>'
+                             for i, c in enumerate(colors * 2))
+        chats.append(f'''<svg x="0" y="0" width="1" height="1">{geom(key)}
+<clipPath id="clip-{key}"><rect width="100%" height="100%" rx="9"/></clipPath>
+<g clip-path="url(#clip-{key})"><rect width="100%" height="100%" fill="#0b100d"/>
+<g class="chat" style="animation-delay:-{len(key) * 3}s">{chat_lines}</g>
+<rect width="100%" height="24" fill="#0b100d"/><circle cx="13" cy="12" r="4" fill="{dot}"/>{text('Chat', 23, 16, 11, 600, TEXT)}</g>
 <rect width="100%" height="100%" rx="9" fill="none" stroke="#fff" stroke-opacity=".07"/></svg>''')
 
     focus = f'''<rect x="0" y="0" width="1" height="1" rx="10" fill="none" stroke="{KICK}" stroke-width="2">{''.join(
@@ -378,7 +387,7 @@ def multiview():
     words = blurb(72, 'WATCH EVERYTHING AT ONCE', ('Stream', 'Multiview'),
                   wrap('Kick, Twitch and YouTube streams and their chats side by side, in any layout you like, with live alerts and a game focus mode.', 20, 480),
                   [('Kick', KICK), ('Twitch', TWITCH), ('YouTube', YOUTUBE)], multiview_icon('i-mv', 72, 56, 52))
-    body = f'{words}\n{window}\n{"".join(tiles)}\n{focus_glow}{focus}'
+    body = f'{words}\n{window}\n{"".join(chats + tiles)}\n{focus_glow}{focus}'
     return svg(W, H, 'Stream Multiview: Kick, Twitch and YouTube streams and chats side by side, in any layout', style, defs, body)
 
 
