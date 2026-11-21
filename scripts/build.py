@@ -24,7 +24,7 @@ ICONS = ROOT / 'scripts' / 'icons'
 # The brand's colors (StreamOrchard/brand README).
 LIME, GREEN, TEAL, GRID = '#c4ff5c', '#4cf56a', '#14c79a', '#3dff8a'
 TEXT, MID, DIM = '#eef3ef', '#a9b8ae', '#7d8c83'
-KICK, TWITCH, YOUTUBE = '#53fc18', '#a970ff', '#ff4e45'
+KICK, TWITCH, YOUTUBE, RUMBLE = '#53fc18', '#a970ff', '#ff4e45', '#85c742'
 AMBER, VIOLET = '#f5b942', '#a78bfa'
 
 
@@ -385,10 +385,10 @@ def multiview():
 <filter id="blur24" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="22"/></filter>
 {card(W, H, (.72, .2))}'''
     words = blurb(72, 'WATCH EVERYTHING AT ONCE', ('Stream', 'Multiview'),
-                  wrap('Kick, Twitch and YouTube streams and their chats side by side, in any layout you like, with live alerts and a game focus mode.', 20, 480),
-                  [('Kick', KICK), ('Twitch', TWITCH), ('YouTube', YOUTUBE)], multiview_icon('i-mv', 72, 56, 52))
+                  wrap('Kick, Twitch, YouTube and Rumble streams and their chats side by side, in any layout you like, with live alerts and a game focus mode.', 20, 480),
+                  [('Kick', KICK), ('Twitch', TWITCH), ('YouTube', YOUTUBE), ('Rumble', RUMBLE)], multiview_icon('i-mv', 72, 56, 52))
     body = f'{words}\n{window}\n{"".join(chats + tiles)}\n{focus_glow}{focus}'
-    return svg(W, H, 'Stream Multiview: Kick, Twitch and YouTube streams and chats side by side, in any layout', style, defs, body)
+    return svg(W, H, 'Stream Multiview: Kick, Twitch, YouTube and Rumble streams and chats side by side, in any layout', style, defs, body)
 
 
 # ---------------------------------------------------------------- Pear Drops
