@@ -9,7 +9,7 @@
 
 <br>
 
-<a href="https://github.com/GlowingPear/stream-window-multiview"><img src="stream-multiview.svg" width="100%" alt="Stream Multiview: Kick, Twitch and YouTube streams and chats side by side, moving between the Focus view, Tile and Columns layouts."></a>
+<a href="https://github.com/GlowingPear/stream-window-multiview"><img src="stream-multiview.svg" width="100%" alt="Stream Multiview: Kick, Twitch, YouTube and Rumble streams and chats side by side, moving between the Focus view, Tile and Columns layouts."></a>
 
 <p align="center">
   <a href="https://github.com/GlowingPear/stream-window-multiview/releases/latest"><b>Download</b></a>
@@ -45,5 +45,5 @@
 <br>
 
 <p align="center">
-  <sub>Free and open source under the GPL-3.0 &nbsp;·&nbsp; Not affiliated with or endorsed by Kick, Twitch or YouTube</sub>
+  <sub>Free and open source under the GPL-3.0 &nbsp;·&nbsp; Not affiliated with or endorsed by Kick, Twitch, YouTube or Rumble</sub>
 </p>
